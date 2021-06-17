@@ -1,0 +1,12 @@
+{
+  "name": "nhentai-reader",
+  "displayName": "nhentai-reader",
+  "expo": {
+    "name": "nhentai-reader",
+    "slug": "nhentai-reader",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
