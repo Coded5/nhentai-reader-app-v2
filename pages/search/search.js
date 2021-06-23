@@ -1,68 +1,69 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, Image } from 'react-native';
 import styles from './search.style';
 
-import run_search from './search_engine';
+import Item from './result_item/result_item';
 import Header from '../../components/header';
-import Badge from '../../components/badge';
+import { searchDoujin } from '../../backend';
 
 class Search extends Component {
    state = {
-      query: ""
+      query: "",
+      current_page: 1
    }
 
    handleSearch = () => {
-      result = run_search(this.state.query);
-      this.setState({result: result});
+      if(this.state.query === "") return;
+      let result = searchDoujin(this.state.query, this.state.current_page);
+      if(this.flatListRef !== undefined) this.flatListRef.scrollToOffset({ animated: false, offset: 0 });
+      this.setState({search_result: result, current_page: 1});
+   }
+
+   loadMore = () => {
+      if(this.state.current_page >= this.state.search_result.num_pages) return;
+      this.setState({ current_page: this.state.current_page + 1 });
+      let more_result = searchDoujin(this.state.query, this.state.current_page);
+      let result = this.state.search_result.result;
+      let final_result = result.concat(more_result.result);
+      this.setState({search_result: {result: final_result}});
    }
 
    renderResultView = () => {
-      if(this.state.result === undefined) {
-         return <Text>Start typing to search</Text>;
-      } else if(this.state.result === 0) {
-         return <Text>No result found</Text>;
-      } else {
+      if(this.state.search_result === undefined) {
+         return (
+            <View style={styles.result_panel}>
+               <Image 
+                  style={{width:150, height: 150}}
+                  source={require("../../assets/magnifying-glass.png")}
+               />
+               <Text style={{color: '#fff', fontSize: 25}}>Type to start search!</Text>
+            </View>
+         );
+      } else if(this.state.search_result.result.length === 0) {
+         return (
+            <View style={styles.result_panel}>
+               <Text style={{color: '#fff', fontSize: 125}}>:(</Text>
+               <Text style={{color: '#fff', fontSize: 25}}>No result found!</Text>
+            </View>
+         );
+      } 
+      else {
          return (
             <FlatList 
-               data={this.state.result}
-               renderItem={this.renderSearchResult}
+               ref={(ref) => {this.flatListRef = ref}}
+               data={this.state.search_result.result}
+               renderItem={({item}) => <Item item={item} navigation={this.props.navigation}/>}
                keyExtractor={(item, i) => String(i)}
+               onEndReached={this.loadMore}
             />
          );
       }
    }
 
-   renderSearchResult = ({item}) => {
-      return (
-         <TouchableOpacity  onPress={() => {console.log("take a look")}}>
-            <View style={styles.result_item}>
-               <View>
-               <Image 
-                     style={styles.result_icon}
-                     source={{uri: item.thumbnail}}
-                  />
-               </View>
-               <View style={styles.result_information}>
-                  <Text style={styles.normal_text}>
-                     {item.title}
-                  </Text>
-                  <View style={styles.result_tag}>
-                     {
-                        item.tags.map((i, j) => {
-                           return <Badge text={i} textcolor="#fff" color="#777" key={j} />
-                        })
-                     }
-                  </View>
-               </View>
-            </View>
-         </TouchableOpacity>
-      );
-   }
-
    render() { 
       return (
          <React.Fragment>
-            <Header navigation={this.props.navigation} name={"Download"}/>
+            <Header navigation={this.props.navigation} name={"Search"}/>
             <View style={styles.container}>
                <View style={styles.search_box}>
                   <TextInput style={styles.search_bar}

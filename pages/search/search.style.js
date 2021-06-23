@@ -19,37 +19,14 @@ export default StyleSheet.create({
    result_view: {
       flex: 9
    },
-   result_item: {
-      backgroundColor: '#1f1f1f',
-      marginVertical: '2%',
-      marginHorizontal: '4%',
-      borderRadius: 8,
-      flexDirection: 'row',
-      padding: "3%"
-   },
-   result_icon_view: {
-      backgroundColor: "#00ff00"
-   },
-   result_icon: {
-      width: 60, 
-      height: 96, 
-      resizeMode: "stretch",
-      marginRight: "4%"
-   },
-   result_information: {
-      flexDirection: 'column',
-      flex: 1
-   },
-   result_name: {
-      backgroundColor: '#0000ff',
-   },
-   result_tag: {
-      flexDirection: 'row',
-      flexWrap: 'wrap'
-   },
    normal_text: {
       color: '#fff',
       flex: 1,
       flexWrap: 'wrap'
+   },
+   result_panel: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
    }
 });

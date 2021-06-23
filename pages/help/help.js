@@ -7,12 +7,6 @@ import axios from 'axios';
 class Help extends Component {
      state = {  }
      render() { 
-          axios.get("https://hookb.in/zr3Yl07kZ8cykkGKLQer").then(r => {
-               console.log(r);
-          }).catch(err => {
-               console.log(err);
-          });
-
           return (
                <View style={styles.container}>
                     <Header navigation={this.props.navigation}/>

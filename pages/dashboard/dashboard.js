@@ -1,60 +1,87 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image, Button } from 'react-native';
 import styles from './dashboard.style';
 
+import * as Backend from '../../backend';
 import Header from '../../components/header';
+import Badge from '../../components/badge';
 
 class Dashboard extends Component {
-     state = {  }
+   state = {}
 
-     renderItem = ({item}) => {
-          return (
-               <TouchableOpacity style={styles.child_container} onPress={() => {this.props.onRead(item); this.props.navigation.navigate("Reader")}}>
-                    <Image style={{width: 56, height: 80, marginRight: "4%"}} source={{uri : item.img_uri}} onError={e => console.log(query_result)}/>
-                    <Text style={{color: '#fff', flex: 1, flexWrap: 'wrap'}}>{item.title.english}</Text>
-                    <TouchableOpacity onPress={() => this.props.onDelete(item)} style={{margin: 0, flex: 0.25, alignItems: 'center', justifyContent: 'center'}}>
-                         <Text style={{fontSize: 25}}>🗑️</Text>
-                    </TouchableOpacity>
+   renderItem = ({item}) => {
+      return (
+         <TouchableOpacity onPress={() => {this.props.navigation.navigate("Download", {detail: item})}}>
+            <View style={styles.result_item}>
+               <View>
+                  <Image 
+                     style={styles.result_icon}
+                     source={{uri: Backend.getPageImageURL(item.media_id, item.images.pages[0], 1, true)}}
+                  />
+                  <View style={styles.progressView}>
+                     <TouchableOpacity onPress={() => {Backend.deleteDoujin(item.id, this.props.onUpdate)}}>
+                        <Image
+                           style={{width:30, height: 30, marginTop: "8%"}} 
+                           source={require('../../assets/trash-bin.png')}
+                        />
+                     </TouchableOpacity>
+                  </View>
+               </View>
+               <View style={styles.result_information}>
+                  <Text style={[styles.normal_text, {fontWeight: 'bold'}]}>
+                     {item.title.english}
+                  </Text>
+                  <Text style={styles.normal_text}>
+                     #{item.id}
+                  </Text>
+                  <View style={styles.result_tag}>
+                     {
+                        item.tags.map((i, j) => {
+                           return <Badge text={i.name} textcolor="#fff" color="#777" key={j} />
+                        })
+                     }
+                  </View>
+               </View>
+            </View>
+         </TouchableOpacity>
+      );
+   }
+
+   renderDashboard = () => {
+      if(this.props.doujins.length === 0) {
+         return (
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+               <Text style={{color: '#fff', margin: '2%'}}>Theres nothing yet</Text>
+               <Button
+                  onPress={() => {this.props.navigation.navigate("Search")}}
+                  title="start searching"
+                  color="#ed2553"
+               />
+            </View>
+         );
+      } else {
+         return (
+            <FlatList
+               data={this.props.doujins}
+               renderItem={this.renderItem}
+               keyExtractor={item => String(item.id)}
+            />
+         );
+      }
+   }
+
+   render() {
+      return (
+         <React.Fragment>
+            <View style={styles.container}>
+               {this.renderDashboard()}
+               <TouchableOpacity onPress={() => this.props.navigation.navigate("Search")} style={styles.add}>
+                  <Text style={{color: '#fff', fontSize: 25, fontWeight: 'bold'}}>+</Text>
                </TouchableOpacity>
-          );
-     }
-     
-     render() {
-          return (
-               <React.Fragment>
-                    <Header navigation={this.props.navigation} goto={"Help"} />
-                    <View style={styles.container}>
-                         <View style={{padding: 20}}>
-                              {
-                                   (this.props.nh.length !== 0) ? (
-                                        <React.Fragment>
-                                             <FlatList 
-                                                  data={this.props.nh}
-                                                  renderItem={this.renderItem}
-                                                  keyExtractor={item => ""+item.id}
-                                             />
-
-                                             
-                                        </React.Fragment>
-                                   ) : (
-                                        <View style={styles.nothing}>
-                                             <Text style={{color: '#fff', margin: '2%'}}>Theres nothing yet</Text>
-                                             <Button
-                                                  onPress={() => {this.props.navigation.navigate("Download")}}
-                                                  title="Go to download"
-                                                  color="#ed2553"
-                                             />
-                                        </View>
-                                   )
-                              }
-                         </View>     
-                    </View>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Download")} style={styles.add}>
-                         <Text style={{color: '#fff', fontSize: 25}}>+</Text>
-                    </TouchableOpacity>
-               </React.Fragment>
-          );
-     }
+            </View>
+         </React.Fragment>
+      );
+   }
 }
  
 export default Dashboard;

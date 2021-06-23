@@ -24,23 +24,44 @@ public class DirectoryModule extends ReactContextBaseJavaModule {
         return getReactApplicationContext().getFilesDir().getAbsolutePath();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    public String testDownloadWrite() {
-        ContentResolver resolver = getReactApplicationContext().getContentResolver();
+    @ReactMethod
+    public void listFolderInDirectory(String path, final Promise promise) {
+        File file = new File(path);
+        FileFilter dirFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        };
 
-        Uri collection;
-        collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-
-        ContentValues file = new ContentValues();
-        file.put(MediaStore.Downloads.DISPLAY_NAME, "test.txt");
-        Uri result = resolver.insert(collection, file);
-        Log.d(getName(), result.getPath());
-        return result.getPath();
+        File[] dirs = file.listFiles(dirFilter);
+        WritableArray paths = Arguments.createArray();
+        for(int i = 0; i < dirs.length; i++) {
+            paths.pushString(dirs[i].getAbsolutePath());
+        }
+        promise.resolve(paths);
     }
 
     @ReactMethod
-    public void listAllDownloaded(final Promise promise) {
+    public void listFileInDirectory(String path, final Promise promise) {
+        File file = new File(path);
+        FileFilter dirFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return !pathname.isDirectory();
+            }
+        };
+
+        File[] dirs = file.listFiles(dirFilter);
+        WritableArray paths = Arguments.createArray();
+        for(int i = 0; i < dirs.length; i++) {
+            paths.pushString(dirs[i].getAbsolutePath());
+        }
+        promise.resolve(paths);
+    }
+
+    @ReactMethod
+    public void listAllDownloaded(String path, final Promise promise) {
         File file = getReactApplicationContext().getFilesDir();
         FileFilter dirFilter = new FileFilter() {
             @Override
