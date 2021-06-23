@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import * as RNFS from 'react-native-fs';
 import * as Backend from './backend';
 
 import Dashboard from './pages/dashboard/dashboard';
 import Search from './pages/search/search';
 import Download from './pages/download/download';
 import Reader from './pages/reader/reader';
-import Help from './pages/help/help';
 
 const Stack = createStackNavigator();
 
@@ -18,17 +16,7 @@ class NhentaiReader extends Component {
    };
 
    componentDidMount() {
-      //load doujins
-
       this.loadDoujins();
-      
-      if(false) {
-         RNFS.unlink(RNFS.DocumentDirectoryPath + "/list.json").then(() => {
-            console.log("DELETED");
-         }).catch(err => {
-            console.log(err);
-         });
-      }
    }
 
    loadDoujins = async () => {

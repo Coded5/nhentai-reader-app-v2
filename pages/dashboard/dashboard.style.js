@@ -47,6 +47,18 @@ export default StyleSheet.create({
       bottom: '5%',
       right: '5%' 
    },
+   save : {
+      width: 50,
+      height: 50,
+      padding: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 100,
+      backgroundColor: '#ed2553',
+      position: 'absolute',
+      bottom: '5%',
+      left: '5%' 
+   },
    progressView: {
       //backgroundColor: '#0000ff',
       marginTop: "16%"
