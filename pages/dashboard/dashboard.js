@@ -3,8 +3,8 @@ import { View, Text, FlatList, TouchableOpacity, Image, Button } from 'react-nat
 import styles from './dashboard.style';
 
 import * as Backend from '../../backend';
-import Header from '../../components/header';
 import Badge from '../../components/badge';
+import FastImage from 'react-native-fast-image';
 
 class Dashboard extends Component {
    state = {}
@@ -14,7 +14,7 @@ class Dashboard extends Component {
          <TouchableOpacity onPress={() => {this.props.navigation.navigate("Download", {detail: item})}}>
             <View style={styles.result_item}>
                <View>
-                  <Image 
+                  <FastImage 
                      style={styles.result_icon}
                      source={{uri: Backend.getPageImageURL(item.media_id, item.images.pages[0], 1, true)}}
                   />

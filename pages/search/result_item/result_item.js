@@ -7,8 +7,7 @@ import Badge from '../../../components/badge';
 
 class Item extends PureComponent {
    state = {  }
-   render() { 
-      console.log(this.props.item);
+   render() {
       return (
          <TouchableOpacity  onPress={() => {this.props.navigation.navigate("Download", {detail: this.props.item})}}>
             <View style={styles.result_item}>

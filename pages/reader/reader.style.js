@@ -7,9 +7,21 @@ export default StyleSheet.create({
    },
    header: {
       backgroundColor: '#1f1f1f',
-      padding: "1%"
+      padding: "3%",
+      flexDirection: 'row',
+      justifyContent: 'space-between'
    },
    normal_text: {
          color: '#fff'
+   },
+   under_tab: {
+      backgroundColor: '#1f1f1f',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+   },
+   under_tab_button: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
    }
 });

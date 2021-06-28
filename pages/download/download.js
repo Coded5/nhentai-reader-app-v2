@@ -52,7 +52,7 @@ class Download extends Component {
       if(this.state.progress === undefined) {
          return (
             <TouchableOpacity style={styles.floating_button} onPress={this.handleDownload}>
-               <Image 
+               <FastImage 
                   style={{width: 20, height: 20}}
                   source={require('../../assets/download-icon.png')}
                />

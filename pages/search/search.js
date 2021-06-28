@@ -5,6 +5,7 @@ import styles from './search.style';
 import Item from './result_item/result_item';
 import Header from '../../components/header';
 import { searchDoujin } from '../../backend';
+import FastImage from 'react-native-fast-image';
 
 class Search extends Component {
    state = {
@@ -32,7 +33,7 @@ class Search extends Component {
       if(this.state.search_result === undefined) {
          return (
             <View style={styles.result_panel}>
-               <Image 
+               <FastImage 
                   style={{width:150, height: 150}}
                   source={require("../../assets/magnifying-glass.png")}
                />
